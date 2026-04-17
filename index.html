@@ -2,35 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoidPurgeX | UwillSurrender</title>
     <style>
-        body { background: #0a0a0a; color: #00ffff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .console { background: #000; border: 2px solid #8000ff; padding: 20px; width: 80%; max-width: 600px; box-shadow: 0 0 20px #8000ff; border-radius: 10px; }
-        h1 { color: #8000ff; text-transform: uppercase; letter-spacing: 5px; }
-        .btn { background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 10px 20px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; margin-top: 20px; }
-        .btn:hover { background: #00ffff; color: #000; box-shadow: 0 0 15px #00ffff; }
-        #output { color: #00ff00; margin-top: 15px; font-size: 0.9rem; }
+        body { background: #050505; color: #00ffff; font-family: 'Courier New', monospace; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .console-box { width: 90%; max-width: 500px; border: 2px solid #8000ff; background: #000; box-shadow: 0 0 30px #8000ff; border-radius: 8px; padding: 20px; position: relative; }
+        .glitch-title { color: #8000ff; font-weight: bold; text-align: center; letter-spacing: 3px; margin-bottom: 20px; text-shadow: 2px 2px #00ffff; }
+        #terminal { font-size: 0.85rem; line-height: 1.5; height: 200px; overflow-y: auto; border-top: 1px solid #333; padding-top: 10px; margin-bottom: 20px; }
+        .btn { display: block; width: 100%; background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 12px; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: #00ffff; color: #000; box-shadow: 0 0 20px #00ffff; }
+        .cursor { display: inline-block; width: 8px; height: 15px; background: #00ffff; animation: blink 1s infinite; vertical-align: middle; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
-    <h1>VoidPurgeX</h1>
-    <div class="console">
-        <p>> STATUS: System Idle...</p>
-        <p>> TARGET: Digital Debris</p>
-        <button class="btn" onclick="startPurge()">INITIATE PURGE</button>
-        <div id="output"></div>
+    <div class="console-box">
+        <div class="glitch-title">VOIDPURGEX v1.0</div>
+        <div id="terminal">
+            <p>> SYSTEM: ONLINE</p>
+            <p>> BRAND: UWILLSURRENDER</p>
+            <p>> READY TO PURGE...</p>
+        </div>
+        <button class="btn" onclick="runDiagnostics()">INITIATE DEEP PURGE</button>
     </div>
 
     <script>
-        function startPurge() {
-            const out = document.getElementById('output');
-            out.innerHTML = "Connecting to GitHub engine...<br>";
-            setTimeout(() => { out.innerHTML += "Analyzing Nix Store...<br>"; }, 500);
-            setTimeout(() => { out.innerHTML += "<strong>PURGE INITIATED.</strong><br>"; }, 1000);
-            setTimeout(() => { 
-                out.innerHTML += "<br>COPY THIS COMMAND TO RUN LOCALLY:<br>";
-                out.innerHTML += "<code style='color:white'>curl -sL https://raw.githubusercontent.com/Dang420/VoidPurgeX/main/voidpurge.sh | bash</code>";
-            }, 2000);
+        const logs = [
+            "> INITIALIZING VIRTUAL ENGINE...",
+            "> SCANNING NIX STORE GENERATIONS...",
+            "> FOUND: 1.4GB OF UNREFERENCED DEBRIS",
+            "> BYPASSING SECURITY PROTOCOLS...",
+            "> [ERROR]: TERMINAL ACCESS RESTRICTED BY BROWSER",
+            "> ---------------------------------------",
+            "> ACTION REQUIRED: COPY COMMAND BELOW",
+            "> TO PURGE LOCALLY ON THIS DEVICE:",
+            "curl -sL https://raw.githubusercontent.com/Dang420/VoidPurgeX/main/voidpurge.sh | bash"
+        ];
+
+        function runDiagnostics() {
+            const terminal = document.getElementById('terminal');
+            terminal.innerHTML = ""; // Clear screen
+            let i = 0;
+            
+            function typeLog() {
+                if (i < logs.length) {
+                    let p = document.createElement('p');
+                    p.innerHTML = logs[i];
+                    if (logs[i].includes("curl")) p.style.color = "#fff";
+                    terminal.appendChild(p);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    i++;
+                    setTimeout(typeLog, 600);
+                }
+            }
+            typeLog();
         }
     </script>
 </body>
