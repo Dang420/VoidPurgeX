@@ -1,38 +1,22 @@
-#!/usr/bin/env bash
-# --- VoidPurgeX v1.0 | by UwillSurrender ---
-
-# Define Colors
-RED='\033[0;31m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
-
+#!/bin/bash
 clear
-echo -e "${PURPLE}--- VOIDPURGEX INITIALIZED ---${NC}"
-echo -e "${CYAN}[SYSTEM CHECK]: Analyzing storage health...${NC}"
+echo -e "\e[1;35m-------------------------------------------\e[0m"
+echo -e "\e[1;36m       VOIDPURGE V1.0 - UWILLSURRENDER      \e[0m"
+echo -e "\e[1;35m-------------------------------------------\e[0m"
 
-# Check storage before
-BEFORE=$(du -sh /nix/store 2>/dev/null | cut -f1)
-echo -e "Current Nix Store Size: ${BEFORE}"
+echo -e "\e[1;33m[!] ACCESSING NIX-STORE...\e[0m"
+sleep 1
 
-echo ""
-echo -e "${RED}[ACTION]: PURGING DIGITAL DEBRIS...${NC}"
-echo -e "${RED}All old versions must surrender.${NC}"
-echo ""
+# This is the actual command that removes the files
+echo -e "\e[1;32m[+] DELETING OLD GENERATIONS...\e[0m"
+nix-env --delete-generations old
 
-# The actual "Cleaning" commands
+echo -e "\e[1;32m[+] COLLECTING GARBAGE...\e[0m"
 nix-collect-garbage -d
-rm -rf ~/.cache/*
 
-# Check storage after
-AFTER=$(du -sh /nix/store 2>/dev/null | cut -f1)
+echo -e "\e[1;32m[+] OPTIMIZING HARD LINKS...\e[0m"
+nix-store --optimise
 
-echo ""
-echo -e "${PURPLE}------------------------------------------${NC}"
-echo -e "${CYAN}         VOIDPURGEX V1.0 COMPLETE         ${NC}"
-echo -e "${GREEN}  Store Optimized: ${BEFORE} -> ${AFTER}  ${NC}"
-echo -e "${PURPLE}------------------------------------------${NC}"
-echo -e "${CYAN}      Brought to you by UwillSurrender    ${NC}"
-echo -e "${PURPLE}------------------------------------------${NC}"
-echo ""
+echo -e "\e[1;35m-------------------------------------------\e[0m"
+echo -e "\e[1;36m    PURGE COMPLETE. DEVICE OPTIMIZED.      \e[0m"
+echo -e "\e[1;35m-------------------------------------------\e[0m"
