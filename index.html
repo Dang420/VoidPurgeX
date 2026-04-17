@@ -5,54 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoidPurgeX | UwillSurrender</title>
     <style>
-        body { background: #050505; color: #00ffff; font-family: 'Courier New', monospace; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        .console-box { width: 90%; max-width: 500px; border: 2px solid #8000ff; background: #000; box-shadow: 0 0 30px #8000ff; border-radius: 8px; padding: 20px; position: relative; }
-        .glitch-title { color: #8000ff; font-weight: bold; text-align: center; letter-spacing: 3px; margin-bottom: 20px; text-shadow: 2px 2px #00ffff; }
-        #terminal { font-size: 0.85rem; line-height: 1.5; height: 200px; overflow-y: auto; border-top: 1px solid #333; padding-top: 10px; margin-bottom: 20px; }
-        .btn { display: block; width: 100%; background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 12px; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.3s; }
+        body { background: #050505; color: #00ffff; font-family: 'Courier New', monospace; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .console-box { width: 90%; max-width: 500px; border: 2px solid #8000ff; background: #000; box-shadow: 0 0 30px #8000ff; border-radius: 8px; padding: 20px; }
+        .glitch-title { color: #8000ff; font-weight: bold; text-align: center; letter-spacing: 3px; margin-bottom: 20px; text-shadow: 2px 2px #00ffff; font-size: 1.5rem; }
+        #terminal { font-size: 0.85rem; line-height: 1.6; height: 250px; overflow-y: auto; border-top: 1px solid #333; padding-top: 15px; margin-bottom: 20px; color: #00ff00; }
+        .btn { display: block; width: 100%; background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 15px; cursor: pointer; font-family: inherit; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
         .btn:hover { background: #00ffff; color: #000; box-shadow: 0 0 20px #00ffff; }
-        .cursor { display: inline-block; width: 8px; height: 15px; background: #00ffff; animation: blink 1s infinite; vertical-align: middle; }
-        @keyframes blink { 50% { opacity: 0; } }
+        
+        /* The Clickable Command Box */
+        .copy-box { 
+            background: #111; border: 1px dashed #8000ff; color: #fff; 
+            padding: 10px; margin-top: 10px; font-size: 0.75rem; 
+            word-break: break-all; cursor: pointer; position: relative;
+        }
+        .copy-box:active { background: #222; }
+        .copy-hint { color: #8000ff; font-size: 0.6rem; display: block; margin-top: 5px; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="console-box">
         <div class="glitch-title">VOIDPURGEX v1.0</div>
         <div id="terminal">
-            <p>> SYSTEM: ONLINE</p>
-            <p>> BRAND: UWILLSURRENDER</p>
-            <p>> READY TO PURGE...</p>
+            <p>> [STATUS]: STANDBY</p>
+            <p>> [USER]: UWILLSURRENDER</p>
+            <p>> [TARGET]: DIGITAL DEBRIS</p>
         </div>
-        <button class="btn" onclick="runDiagnostics()">INITIATE DEEP PURGE</button>
+        <button class="btn" id="mainBtn" onclick="runDiagnostics()">Initiate Scan & Purge</button>
     </div>
 
     <script>
+        const command = "curl -sL https://raw.githubusercontent.com/Dang420/VoidPurgeX/main/voidpurge.sh | bash";
         const logs = [
-            "> INITIALIZING VIRTUAL ENGINE...",
-            "> SCANNING NIX STORE GENERATIONS...",
-            "> FOUND: 1.4GB OF UNREFERENCED DEBRIS",
-            "> BYPASSING SECURITY PROTOCOLS...",
-            "> [ERROR]: TERMINAL ACCESS RESTRICTED BY BROWSER",
+            "> Initializing Nix-Optimized Engine...",
+            "> Scanning /nix/store for unreferenced links...",
+            "> FOUND: 413MB of temporary debris.",
+            "> Analyzing generations... [OK]",
+            "> Cross-referencing UwillSurrender protocols...",
+            "> [READY]: OPTIMIZATION CALCULATED.",
             "> ---------------------------------------",
-            "> ACTION REQUIRED: COPY COMMAND BELOW",
-            "> TO PURGE LOCALLY ON THIS DEVICE:",
-            "curl -sL https://raw.githubusercontent.com/Dang420/VoidPurgeX/main/voidpurge.sh | bash"
+            "> FINAL STEP: TAP BELOW TO COPY COMMAND",
         ];
 
         function runDiagnostics() {
             const terminal = document.getElementById('terminal');
-            terminal.innerHTML = ""; // Clear screen
+            const btn = document.getElementById('mainBtn');
+            btn.style.display = 'none'; // Hide button during scan
+            terminal.innerHTML = ""; 
             let i = 0;
-            
+
             function typeLog() {
                 if (i < logs.length) {
-                    let p = document.createElement('p');
+                    let p = document.createElement('div');
                     p.innerHTML = logs[i];
-                    if (logs[i].includes("curl")) p.style.color = "#fff";
                     terminal.appendChild(p);
                     terminal.scrollTop = terminal.scrollHeight;
                     i++;
-                    setTimeout(typeLog, 600);
+                    setTimeout(typeLog, 400);
+                } else {
+                    // Create the clickable copy box
+                    const div = document.createElement('div');
+                    div.className = "copy-box";
+                    div.innerHTML = command + "<span class='copy-hint' id='hint'>[ Tap to Copy ]</span>";
+                    div.onclick = function() {
+                        navigator.clipboard.writeText(command);
+                        document.getElementById('hint').innerHTML = "[ COPIED TO CLIPBOARD! ]";
+                        document.getElementById('hint').style.color = "#00ff00";
+                    };
+                    terminal.appendChild(div);
                 }
             }
             typeLog();
